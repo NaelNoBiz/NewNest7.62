@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/backgroundNewNest"
+    android:background="@drawable/background5"
 
     tools:context=".ShowListingActivity">
 

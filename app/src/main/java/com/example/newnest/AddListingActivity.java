@@ -153,7 +153,7 @@ public class AddListingActivity extends AppCompatActivity {
         // Uploading the image to firebase storage
         String imagePath = UploadImageToFirebase();
         // Creating the estate object
-        if( !Objects.equals(estateType.getSelectedItem().toString(), "select")&&!Objects.equals(estateType.getSelectedItem().toString(), "select")) {
+        if( !Objects.equals(estateType.getSelectedItem().toString(), "select")&&!Objects.equals(listingType.getSelectedItem().toString(), "select")) {
           if(imagePath!=null){
 
             Estate estate = new Estate(estateTypeValue, addressValue, cityValue, roomNum, floorNum, imagePath

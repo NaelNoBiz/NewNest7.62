@@ -29,25 +29,19 @@ public class User {
         return listedEstates;
     }
 
-    public void setListedEstates(ArrayList<String> listedEstates) {
-        this.listedEstates = listedEstates;
-    }
+
 
     public ArrayList<String> getSaved() {
         return saved;
     }
 
-    public void setSaved(ArrayList<String> saved) {
-        this.saved = saved;
-    }
+
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+
 
     @Override
     public String toString() {

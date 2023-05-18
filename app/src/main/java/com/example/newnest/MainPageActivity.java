@@ -46,7 +46,7 @@ public class MainPageActivity extends AppCompatActivity {
     List<Estate> adapterList = new ArrayList<>();
     List<String> adapterIds, myIds, otherIds, savedListingIds;
     ImageButton home, search, settings;
-    boolean isSavedListing = false;
+    Boolean isSavedListing = false;
     String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,8 @@ public class MainPageActivity extends AppCompatActivity {
         myIds = new ArrayList<>();
         otherIds = new ArrayList<>();
         savedListingIds = new ArrayList<>();
-
+        LoadSavedListings();
+        LoadListings();
         if (services.getAuth().getCurrentUser() != null){
             userId = services.getAuth().getCurrentUser().getUid();
         }
@@ -109,45 +110,8 @@ public class MainPageActivity extends AppCompatActivity {
 
             }
         });
-        services.getFire().collection("listings")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Estate estate = document.toObject(Estate.class);
-                                if (estate.getOwnerId().equals(services.getAuth().getCurrentUser().getUid())){
-                                    mylistings.add(estate);
-                                    myIds.add(document.getId());
-                                }
-                                else {
-                                    estateList.add(estate);
-                                    otherIds.add(document.getId());
-                                }
 
-                            }
-                            adapterList.addAll(estateList);
-                            adapterIds.addAll(otherIds);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(MainPageActivity.this));
-                            adapter = new RecyclerViewAdapter(MainPageActivity.this, adapterList);
-                            adapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    Intent showListingIntent = new Intent(MainPageActivity.this, ShowListingActivity.class);
-                                    showListingIntent.putExtra("listingId", adapterIds.get(position));
-                                    showListingIntent.putExtra("listingImage", adapterList.get(position).getPicture());
-                                    startActivity(showListingIntent);
 
-                                }
-                            });
-                            recyclerView.setAdapter(adapter);
-                        } else {
-                            Log.d("Error occurred", "Error getting documents: ", task.getException());
-                        }
-                    }
-        });
-        loadSavedListings();
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,8 +152,48 @@ public class MainPageActivity extends AppCompatActivity {
 
     }
 
+    public void LoadListings()
+    {
+        services.getFire().collection("listings")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Estate estate = document.toObject(Estate.class);
+                                if (estate.getOwnerId().equals(services.getAuth().getCurrentUser().getUid())){
+                                    mylistings.add(estate);
+                                    myIds.add(document.getId());
+                                }
+                                else {
+                                    estateList.add(estate);
+                                    otherIds.add(document.getId());
+                                }
 
-    private void loadSavedListings(){
+                            }
+                            adapterList.addAll(estateList);
+                            adapterIds.addAll(otherIds);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(MainPageActivity.this));
+                            adapter = new RecyclerViewAdapter(MainPageActivity.this, adapterList);
+                            adapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    Intent showListingIntent = new Intent(MainPageActivity.this, ShowListingActivity.class);
+                                    showListingIntent.putExtra("listingId", adapterIds.get(position));
+                                    showListingIntent.putExtra("listingImage", adapterList.get(position).getPicture());
+                                    startActivity(showListingIntent);
+
+                                }
+                            });
+                            recyclerView.setAdapter(adapter);
+                        } else {
+                            Log.d("Error occurred", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+    private void LoadSavedListings(){
         services.getFire().collection("users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

@@ -31,21 +31,23 @@ public class ResetPasswordActivity extends AppCompatActivity {
         Send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                services.getAuth().sendPasswordResetEmail(Email.toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ResetPasswordActivity.this, "Reset link sent", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                        else Toast.makeText(ResetPasswordActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-
-                });
-
-
+                ResetPassProcess(Email.toString().trim());
             }
         });
 
-}}
+}
+    public void ResetPassProcess(String EmailText){
+    services.getAuth().sendPasswordResetEmail(EmailText).addOnCompleteListener(new OnCompleteListener<Void>() {
+        @Override
+        public void onComplete(@NonNull Task<Void> task) {
+            if (task.isSuccessful()) {
+                Toast.makeText(ResetPasswordActivity.this, "Reset link sent", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else Toast.makeText(ResetPasswordActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    });
+}
+}

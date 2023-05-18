@@ -21,31 +21,23 @@ public class FirebaseServices {
         return instance;
     }
 
-    public static void setInstance(FirebaseServices instance) {
-        FirebaseServices.instance = instance;
-    }
+
 
     public FirebaseAuth getAuth() {
         return auth;
     }
 
-    public void setAuth(FirebaseAuth auth) {
-        this.auth = auth;
-    }
+
 
     public FirebaseFirestore getFire() {
         return fire;
     }
 
-    public void setFire(FirebaseFirestore fire) {
-        this.fire = fire;
-    }
+
 
     public FirebaseStorage getStorage() {
         return storage;
     }
 
-    public void setStorage(FirebaseStorage storage) {
-        this.storage = storage;
-    }
+
 }

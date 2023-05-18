@@ -48,28 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pass =password.getText().toString().trim();
-                String emailText = email.getText().toString().trim();
-                String userText = username.getText().toString().trim();
-                if (checkFields(pass, emailText, userText)){
-                    services.getAuth().createUserWithEmailAndPassword(emailText, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Toast.makeText(SignUpActivity.this, "Successfully created new user", Toast.LENGTH_SHORT).show();
-                            if (task.isSuccessful()){
-                                if (task.getResult() != null && task.getResult().getUser() != null){
-                                    String userId = task.getResult().getUser().getUid();
-                                    User user = new User(userText, userId, new ArrayList<>(), new ArrayList<>());
-                                    services.getFire().collection("users").document(user.getUserId()).set(user);
-                                    Intent goToMainPage = new Intent(SignUpActivity.this, MainPageActivity.class);
-                                    startActivity(goToMainPage);
-                                    finish();
-                                }
-                            }
-                        }
-                    });
-                }
-
+             SignupProcess(password.getText().toString().trim(),email.getText().toString().trim(),username.getText().toString().trim());
 
             }
         });
@@ -88,5 +67,26 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+    public void SignupProcess(String pass,String emailText,String userText){
+
+        if (checkFields(pass, emailText, userText)){
+            services.getAuth().createUserWithEmailAndPassword(emailText, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    Toast.makeText(SignUpActivity.this, "Successfully created new user", Toast.LENGTH_SHORT).show();
+                    if (task.isSuccessful()){
+                        if (task.getResult() != null && task.getResult().getUser() != null){
+                            String userId = task.getResult().getUser().getUid();
+                            User user = new User(userText, userId, new ArrayList<>(), new ArrayList<>());
+                            services.getFire().collection("users").document(user.getUserId()).set(user);
+                            Intent goToMainPage = new Intent(SignUpActivity.this, MainPageActivity.class);
+                            startActivity(goToMainPage);
+                            finish();
+                        }
+                    }
+                }
+            });
+        }
     }
 }

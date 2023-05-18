@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Intent ResetPass= new Intent(MainActivity.this,ResetPasswordActivity.class);
         startActivity(ResetPass);
         }});
+
+
         goToSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,23 +67,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pass =password.getText().toString().trim();
-                String emailText = email.getText().toString().trim();
-                checkFields(pass, emailText);
-                services.getAuth().signInWithEmailAndPassword(emailText, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Intent goToMainPage = new Intent(MainActivity.this, MainPageActivity.class);
-                            startActivity(goToMainPage);
-                        }
-                        else{
-                            if (task.getException() != null){
-                                Toast.makeText(MainActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
+             LoginProcess(password.getText().toString().trim(),email.getText().toString().trim());
             }
         });
 
@@ -98,4 +84,23 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+    public void LoginProcess(String pass,String emailText){
+
+        checkFields(pass, emailText);
+        services.getAuth().signInWithEmailAndPassword(emailText, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Intent goToMainPage = new Intent(MainActivity.this, MainPageActivity.class);
+                    startActivity(goToMainPage);
+                }
+                else{
+                    if (task.getException() != null){
+                        Toast.makeText(MainActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
 }

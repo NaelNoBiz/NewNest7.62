@@ -60,14 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (username.getText().toString().length() > 3){
-                    services.getFire().collection("users").document(userId).update("username", username.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(SettingsActivity.this, "Successfully updated name", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    UpdateName();
                 }
                 else{
                     Toast.makeText(SettingsActivity.this, "Name must be at least 4 letters", Toast.LENGTH_SHORT).show();
@@ -92,5 +85,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+
     }
+   public void UpdateName(){
+       services.getFire().collection("users").document(userId).update("username", username.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+           @Override
+           public void onComplete(@NonNull Task<Void> task) {
+               if (task.isSuccessful()){
+                   Toast.makeText(SettingsActivity.this, "Successfully updated name", Toast.LENGTH_SHORT).show();
+               }
+           }
+       });
+   }
 }
